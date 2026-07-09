@@ -1,0 +1,1776 @@
+<!DOCTYPE html>
+<html lang="vi" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.161.1">
+    <meta
+  name="description"
+  content=""
+/>
+<meta name="author" content="thienlh@thienlu.com" />
+
+    <link rel="icon" href="/aws-training-report-PhamHoangPhuong/images/favicon.png" type="image/png">
+
+    <title>5.6-Compute-ECS</title>
+
+    
+    <link href="/aws-training-report-PhamHoangPhuong/css/nucleus.css?1779445607" rel="stylesheet">
+    <link href="/aws-training-report-PhamHoangPhuong/css/fontawesome-all.min.css?1779445607" rel="stylesheet">
+    <link href="/aws-training-report-PhamHoangPhuong/css/hybrid.css?1779445607" rel="stylesheet">
+    <link href="/aws-training-report-PhamHoangPhuong/css/featherlight.min.css?1779445607" rel="stylesheet">
+    <link href="/aws-training-report-PhamHoangPhuong/css/perfect-scrollbar.min.css?1779445607" rel="stylesheet">
+    <link href="/aws-training-report-PhamHoangPhuong/css/auto-complete.css?1779445607" rel="stylesheet">
+    <link href="/aws-training-report-PhamHoangPhuong/css/atom-one-dark-reasonable.css?1779445607" rel="stylesheet">
+    <link href="/aws-training-report-PhamHoangPhuong/css/theme.css?1779445607" rel="stylesheet">
+    <link href="/aws-training-report-PhamHoangPhuong/css/hugo-theme.css?1779445607" rel="stylesheet">
+    
+    <link href="/aws-training-report-PhamHoangPhuong/css/theme-workshop.css?1779445607" rel="stylesheet">
+    
+    
+
+    <script src="/aws-training-report-PhamHoangPhuong/js/jquery-3.3.1.min.js?1779445607"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    
+
+  </head>
+  <body class="" data-url="/aws-training-report-PhamHoangPhuong/5-workshop/5.2-prerequiste/">
+    <nav
+  id="sidebar"
+  class="showVisitedLinks"
+>
+   
+  <div id="header-wrapper">
+    <div id="header"><a id="logo" href="/">
+
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="30%"><defs><style>.cls-1{fill:#fff;}.cls-2{fill:#fff;fill-rule:evenodd;}</style></defs><title>AWS-Logo_White-Color</title><path class="cls-1" d="M14.09,10.85a4.7,4.7,0,0,0,.19,1.48,7.73,7.73,0,0,0,.54,1.19.77.77,0,0,1,.12.38.64.64,0,0,1-.32.49l-1,.7a.83.83,0,0,1-.44.15.69.69,0,0,1-.49-.23,3.8,3.8,0,0,1-.6-.77q-.25-.42-.51-1a6.14,6.14,0,0,1-4.89,2.3,4.54,4.54,0,0,1-3.32-1.19,4.27,4.27,0,0,1-1.22-3.2A4.28,4.28,0,0,1,3.61,7.75,6.06,6.06,0,0,1,7.69,6.46a12.47,12.47,0,0,1,1.76.13q.92.13,1.91.36V5.73a3.65,3.65,0,0,0-.79-2.66A3.81,3.81,0,0,0,7.86,2.3a7.71,7.71,0,0,0-1.79.22,12.78,12.78,0,0,0-1.79.57,4.55,4.55,0,0,1-.58.22l-.26,0q-.35,0-.35-.52V2a1.09,1.09,0,0,1,.12-.58,1.2,1.2,0,0,1,.47-.35A10.88,10.88,0,0,1,5.77.32,10.19,10.19,0,0,1,8.36,0a6,6,0,0,1,4.35,1.35,5.49,5.49,0,0,1,1.38,4.09ZM7.34,13.38a5.36,5.36,0,0,0,1.72-.31A3.63,3.63,0,0,0,10.63,12,2.62,2.62,0,0,0,11.19,11a5.63,5.63,0,0,0,.16-1.44v-.7a14.35,14.35,0,0,0-1.53-.28,12.37,12.37,0,0,0-1.56-.1,3.84,3.84,0,0,0-2.47.67A2.34,2.34,0,0,0,5,11a2.35,2.35,0,0,0,.61,1.76A2.4,2.4,0,0,0,7.34,13.38Zm13.35,1.8a1,1,0,0,1-.64-.16,1.3,1.3,0,0,1-.35-.65L15.81,1.51a3,3,0,0,1-.15-.67.36.36,0,0,1,.41-.41H17.7a1,1,0,0,1,.65.16,1.4,1.4,0,0,1,.33.65l2.79,11,2.59-11A1.17,1.17,0,0,1,24.39.6a1.1,1.1,0,0,1,.67-.16H26.4a1.1,1.1,0,0,1,.67.16,1.17,1.17,0,0,1,.32.65L30,12.39,32.88,1.25A1.39,1.39,0,0,1,33.22.6a1,1,0,0,1,.65-.16h1.54a.36.36,0,0,1,.41.41,1.36,1.36,0,0,1,0,.26,3.64,3.64,0,0,1-.12.41l-4,12.86a1.3,1.3,0,0,1-.35.65,1,1,0,0,1-.64.16H29.25a1,1,0,0,1-.67-.17,1.26,1.26,0,0,1-.32-.67L25.67,3.64,23.11,14.34a1.26,1.26,0,0,1-.32.67,1,1,0,0,1-.67.17Zm21.36.44a11.28,11.28,0,0,1-2.56-.29,7.44,7.44,0,0,1-1.92-.67,1,1,0,0,1-.61-.93v-.84q0-.52.38-.52a.9.9,0,0,1,.31.06l.42.17a8.77,8.77,0,0,0,1.83.58,9.78,9.78,0,0,0,2,.2,4.48,4.48,0,0,0,2.43-.55,1.76,1.76,0,0,0,.86-1.57,1.61,1.61,0,0,0-.45-1.16A4.29,4.29,0,0,0,43,9.22l-2.41-.76A5.15,5.15,0,0,1,38,6.78a3.94,3.94,0,0,1-.83-2.41,3.7,3.7,0,0,1,.45-1.85,4.47,4.47,0,0,1,1.19-1.37A5.27,5.27,0,0,1,40.51.29,7.4,7.4,0,0,1,42.6,0a8.87,8.87,0,0,1,1.12.07q.57.07,1.08.19t.95.26a4.27,4.27,0,0,1,.7.29,1.59,1.59,0,0,1,.49.41.94.94,0,0,1,.15.55v.79q0,.52-.38.52a1.76,1.76,0,0,1-.64-.2,7.74,7.74,0,0,0-3.2-.64,4.37,4.37,0,0,0-2.21.47,1.6,1.6,0,0,0-.79,1.48,1.58,1.58,0,0,0,.49,1.18,4.94,4.94,0,0,0,1.83.92L44.55,7a5.08,5.08,0,0,1,2.57,1.6A3.76,3.76,0,0,1,47.9,11a4.21,4.21,0,0,1-.44,1.93,4.4,4.4,0,0,1-1.21,1.47,5.43,5.43,0,0,1-1.85.93A8.25,8.25,0,0,1,42.05,15.62Z"></path><path class="cls-2" d="M45.19,23.81C39.72,27.85,31.78,30,25,30A36.64,36.64,0,0,1,.22,20.57c-.51-.46-.06-1.09.56-.74A49.78,49.78,0,0,0,25.53,26.4,49.23,49.23,0,0,0,44.4,22.53C45.32,22.14,46.1,23.14,45.19,23.81Z"></path><path class="cls-2" d="M47.47,21.21c-.7-.9-4.63-.42-6.39-.21-.53.06-.62-.4-.14-.74,3.13-2.2,8.27-1.57,8.86-.83s-.16,5.89-3.09,8.35c-.45.38-.88.18-.68-.32C46.69,25.8,48.17,22.11,47.47,21.21Z"></path></svg>
+
+</a>
+</div>
+     <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="Search...">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/aws-training-report-PhamHoangPhuong/js/lunr.min.js?1779445607"></script>
+<script type="text/javascript" src="/aws-training-report-PhamHoangPhuong/js/auto-complete.js?1779445607"></script>
+<script type="text/javascript">
+    
+        var baseurl = "\/aws-training-report-PhamHoangPhuong\/";
+    
+</script>
+<script type="text/javascript" src="/aws-training-report-PhamHoangPhuong/js/search.js?1779445607"></script>
+ 
+  </div>
+
+  <div class="highlightable">
+    <ul class="topics">
+               
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/1-worklog/"
+  title="Worklog"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/1-worklog/">
+     <b> 1. </b> Worklog 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+  <ul>
+          
+            
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/1-worklog/1.1-week1/"
+  title="Week 1 Worklog"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/1-worklog/1.1-week1/">
+     <b> 1.1. </b> Week 1 Worklog 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+</li>
+    
+            
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/1-worklog/1.2-week2/"
+  title="Week 2 Worklog"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/1-worklog/1.2-week2/">
+     <b> 1.2. </b> Week 2 Worklog 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+</li>
+    
+            
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/1-worklog/1.3-week3/"
+  title="Week 3 Worklog"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/1-worklog/1.3-week3/">
+     <b> 1.3. </b> Week 3 Worklog 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+</li>
+    
+            
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/1-worklog/1.4-week4/"
+  title="Week 4 Worklog"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/1-worklog/1.4-week4/">
+     <b> 1.4. </b> Week 4 Worklog 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+</li>
+    
+            
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/1-worklog/1.5-week5/"
+  title="Week 5 Worklog"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/1-worklog/1.5-week5/">
+     <b> 1.5. </b> Week 5 Worklog 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+</li>
+    
+            
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/1-worklog/1.6-week6/"
+  title="Week 6 Worklog"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/1-worklog/1.6-week6/">
+     <b> 1.6. </b> Week 6 Worklog 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+</li>
+    
+            
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/1-worklog/1.7-week7/"
+  title="Week 7 Worklog"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/1-worklog/1.7-week7/">
+     <b> 1.7. </b> Week 7 Worklog 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+</li>
+    
+            
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/1-worklog/1.8-week8/"
+  title="Week 8 Worklog"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/1-worklog/1.8-week8/">
+     <b> 1.8. </b> Week 8 Worklog 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+</li>
+    
+            
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/1-worklog/1.9-week9/"
+  title="Week 9 Worklog"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/1-worklog/1.9-week9/">
+     <b> 1.9. </b> Week 9 Worklog 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+</li>
+    
+            
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/1-worklog/1.10-week10/"
+  title="Week 10 Worklog"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/1-worklog/1.10-week10/">
+     <b> 1.10. </b> Week 10 Worklog 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+</li>
+    
+            
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/1-worklog/1.11-week11/"
+  title="Week 11 Worklog"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/1-worklog/1.11-week11/">
+     <b> 1.11. </b> Week 11 Worklog 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+</li>
+    
+            
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/1-worklog/1.12-week12/"
+  title="Week 12 Worklog"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/1-worklog/1.12-week12/">
+     <b> 1.12. </b> Week 12 Worklog 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+</li>
+     
+  </ul>
+  
+</li>
+           
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/2-proposal/"
+  title="Proposal"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/2-proposal/">
+     <b> 2. </b> Proposal 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+</li>
+           
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/3-blogsposted/"
+  title="Blogs Posted"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/3-blogsposted/">
+     <b> 3. </b> Blogs Posted 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+  <ul>
+          
+            
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/3-blogsposted/3.1-blog1/"
+  title="Blog 1"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/3-blogsposted/3.1-blog1/">
+     <b> 3.1. </b> Blog 1 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+</li>
+    
+            
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/3-blogsposted/3.2-blog2/"
+  title="Blog 2"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/3-blogsposted/3.2-blog2/">
+     <b> 3.2. </b> Blog 2 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+</li>
+    
+            
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/3-blogsposted/3.3-blog3/"
+  title="Blog 3"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/3-blogsposted/3.3-blog3/">
+     <b> 3.3. </b> Blog 3 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+</li>
+     
+  </ul>
+  
+</li>
+           
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/4-eventparticipated/"
+  title="Events Participated"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/4-eventparticipated/">
+     <b> 4. </b> Events Participated 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+  <ul>
+          
+            
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/4-eventparticipated/4.1-event1/"
+  title="Event 1"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/4-eventparticipated/4.1-event1/">
+     <b> 4.1. </b> Event 1 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+</li>
+    
+            
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/4-eventparticipated/4.2-event2/"
+  title="Event 2"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/4-eventparticipated/4.2-event2/">
+     <b> 4.2. </b> Event 2 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+</li>
+     
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/4-eventparticipated/4.3-event3/"
+  title="Event 3"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/4-eventparticipated/4.3-event3/">
+     <b> 4.3. </b> Event 3 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+</li>
+   
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/4-eventparticipated/4.4-event4/"
+  title="Event 4"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/4-eventparticipated/4.4-event4/">
+     <b> 4.4. </b> Event 4
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+</li>
+
+
+  </ul>
+  
+</li>
+           
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/5-workshop/"
+  title="Workshop"
+  class="dd-item 
+        parent
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/5-workshop/">
+     <b> 5. </b> Workshop 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+  <ul>
+          
+            
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/5-workshop/5.1-workshop-overview/"
+  title="Introduction"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/5-workshop/5.1-workshop-overview/">
+     <b> 5.1. </b> Introduction 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+</li>
+    
+            
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/5-workshop/5.2-prerequiste/"
+  title="Prerequiste"
+  class="dd-item 
+        
+        active
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/5-workshop/5.2-prerequiste/">
+     <b> 5.2. </b> Prerequiste 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+</li>
+    
+            
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/5-workshop/5.3-Networking/"
+  title="Networking"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/5-workshop/5.3-Networking/">
+     <b> 5.3. </b> Networking 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/5-workshop/5.4-Data-Identity"
+  title="Data & Identity"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/5-workshop/5.4-Data-Identity">
+     <b> 5.4. </b> Data & Identity 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/5-workshop/5.5-Async-SQS/"
+  title="Async & SQS"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/5-workshop/5.5-Async-SQS/">
+     <b> 5.5. </b> Async & SQS 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/5-workshop/5.6-Compute-ECS/"
+  title="Compute & ECS"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/5-workshop/5.6-Compute-ECS">
+     <b> 5.6. </b> Compute & ECS 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+
+
+
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/5-workshop/5.7-Frontend-CDN/"
+  title="Frontend & CDN"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/5-workshop/5.7-Frontend-CDN/">
+     <b> 5.7. </b> Frontend & CDN 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+
+
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/5-workshop/5.8-Monitoring/"
+  title="Monitoring"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/5-workshop/5.8-Monitoring/">
+     <b> 5.8. </b> Monitoring 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+
+
+
+
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/5-workshop/5.9-Testing/"
+  title="Testing"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/5-workshop/5.9-Testing/">
+     <b> 5.9. </b> Testing 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+
+
+
+
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/5-workshop/5.10-Security-IAM/"
+  title="Security & IAM"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/5-workshop/5.10-Security-IAM/">
+     <b> 5.10. </b> Security & IAM 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+
+
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/5-workshop/5.11-Cleanup/"
+  title="Cleanup"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/5-workshop/5.11-Cleanup/">
+     <b> 5.11. </b> Cleanup 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+  
+   
+</li>
+     
+  </ul>
+  
+</li>
+           
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/6-self-evaluation/"
+  title="Self-Assessment"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/6-self-evaluation/">
+     <b> 6. </b> Self-Assessment 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+</li>
+           
+<li
+  data-nav-id="/aws-training-report-PhamHoangPhuong/7-feedback/"
+  title="Sharing and Feedback"
+  class="dd-item 
+        
+        
+        
+        "
+>
+  <a href="/aws-training-report-PhamHoangPhuong/7-feedback/">
+     <b> 7. </b> Sharing and Feedback 
+    <i class="fas fa-check read-icon"></i>
+    
+  </a>
+   
+</li>
+    
+    </ul>
+
+     
+    <section id="shortcuts">
+      <h3>
+        More
+      </h3>
+      <ul>
+        
+        <li>
+          <a class="padding" href="http://awsstudygroup.com"
+            ><i class='fab fa-aws'></i> AWS Study Group - Blog</a
+          >
+        </li>
+        
+        <li>
+          <a class="padding" href="https://www.facebook.com/groups/awsstudygroupfcj"
+            ><i class='fab fa-facebook'></i> AWS Study Group - Nhóm FB</a
+          >
+        </li>
+        
+      </ul>
+    </section>
+     
+    <section id="prefooter">
+      <hr />
+      <ul>
+        
+        <li>
+          <a class="padding">
+            <i class="fas fa-language fa-fw"></i>
+            <div class="select-style">
+              <select id="select-language" onchange="location = this.value;">
+                       
+                <option
+                  id="en"
+                  value="/aws-training-report-PhamHoangPhuong/5-workshop/5.6-Compute-ECS/"
+                >
+                  English
+                </option>
+                            
+                <option
+                  id="vi"
+                  value="/aws-training-report-PhamHoangPhuong/vi/5-workshop/5.6-Compute-ECS/"
+                  selected
+                >
+                  Tiếng Việt
+                </option>
+                   
+              </select>
+              <svg
+                version="1.1"
+                id="Capa_1"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                x="0px"
+                y="0px"
+                width="255px"
+                height="255px"
+                viewBox="0 0 255 255"
+                style="enable-background: new 0 0 255 255"
+                xml:space="preserve"
+              >
+                <g>
+                  <g id="arrow-drop-down">
+                    <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
+                  </g>
+                </g>
+              </svg>
+            </div>
+          </a>
+        </li>
+         
+        <li>
+          <a class="padding" href="#" data-clear-history-toggle=""
+            ><i class="fas fa-history fa-fw"></i> Clear History</a
+          >
+        </li>
+        
+      </ul>
+    </section>
+    
+    <section id="footer"><left>
+    <br>
+    <br>
+    <b> Last Updated </b> <br>
+    <i>
+        <font color=orange>22-05-2026</font>
+    </i>
+</left>
+<left>
+    <br>
+    <br>
+    <b> Team </b> <br>
+    <i>
+        <a href="https://www.facebook.com/groups/660548818043427" style="color:orange">First Cloud AI Journey</a>
+    </i>
+</left>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script></section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/aws-training-report-PhamHoangPhuong/'>Báo cáo thực tập</a> > <a href='/aws-training-report-PhamHoangPhuong/5-workshop/'>Workshop</a> > 5.6-Compute-ECS
+          
+        
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+  <div class="wrapper"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              5.6-Compute-ECS
+            </h1>
+          
+
+        
+
+
+
+	<h4>Step 8 — Amazon ECR + Push Container Images</h4>
+<p>Push your container images to Amazon ECR, configure an Application Load Balancer at the front, and run the 3 decoupled services on Amazon ECS Fargate backed by target-tracking Auto Scaling.</p>
+Navigate to Amazon ECR → select Private registry -> Repositories -> click Create repository: Create 3 individual repositories: <code>saashr-auth</code>, <code>saashr-tenant</code>, and <code>saashr-hr</code>.
+<ul>
+<p><img src="/aws-training-report-PhamHoangPhuong/ecr1.png" ></p>
+</ul>
+
+<ul>
+<li>The 3 container repositories are successfully provisioned and ready.</li>
+<p><img src="/aws-training-report-PhamHoangPhuong/ecr2.png" ></p>
+<li>Build and push each microservice image sequentially (using the <code>auth</code> service as an example):</li>
+<li>
+<pre><code># Authenticate your local Docker CLI against the private AWS ECR registry
+aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin &lt;acct&gt;.dkr.ecr.ap-southeast-1.amazonaws.com
+
+# Build the local Docker image
+docker build -t saashr-auth ./microservices/auth-service
+
+# Tag the image referencing your remote ECR repository path
+docker tag saashr-auth:latest &lt;acct&gt;.dkr.ecr.ap-southeast-1.amazonaws.com/saashr-auth:latest
+
+# Push the final container image to Amazon ECR
+docker push &lt;acct&gt;.dkr.ecr.ap-southeast-1.amazonaws.com/saashr-auth:latest</code></pre>
+</li>
+<li>Successfully authenticated via the local AWS CLI:</li>
+<p><img src="/aws-training-report-PhamHoangPhuong/login-aws-ecr.png" ></p>
+<li>Executing the push command via the terminal (example showing the <code>hr</code> service upload):</li>
+<p><img src="/aws-training-report-PhamHoangPhuong/push-ecr.png" ></p>
+<li>The 3 ECR repositories now display their freshly pushed container images tagged as <code>latest</code>:</li>
+<p><img src="/aws-training-report-PhamHoangPhuong/push-ecr3.png" ></p>
+<p><img src="/aws-training-report-PhamHoangPhuong/push-ecr2.png" ></p>
+<p><img src="/aws-training-report-PhamHoangPhuong/push-ecr1.png" ></p>
+<li>📎 Attachments: 3 <code>Dockerfile</code> configurations (Place inside <code>5.6-Compute-ECS/files/</code>).</li>
+</ul>
+
+<h4>Step 9 — Application Load Balancer Configuration</h4>
+<p>Configure individual Target Groups (Target type must be set to <strong>IP</strong> for compatibility with Amazon ECS Fargate tasks, mapping one target group to each microservice):</p>
+<ul>
+<li>Target Groups to provision: <code>tg-auth</code> (Port: 8000), <code>tg-tenant</code> (Port: 8001), and <code>tg-hr</code> (Port: 8002).</li>
+<li>Health check configurations: Set paths to <code>/api/v1/auth/health</code>, <code>/api/v1/tenants/health</code>, and <code>/api/v1/hr/health</code> respectively.</li>
+<li>Optimization: Set the Healthy threshold count to <code>2</code> (Reduces evaluation cycles to roughly 60 seconds -> facilitates faster service deployments).</li>
+<p><img src="/aws-training-report-PhamHoangPhuong/create-tg1.png" ></p>
+<p><img src="/aws-training-report-PhamHoangPhuong/create-tg2.png" ></p>
+<p><img src="/aws-training-report-PhamHoangPhuong/create-tg3.png" ></p>
+<li>Proceed with the creation of <code>tg-tenant</code> and <code>tg-hr</code> target groups following the same blueprint:</li>
+<p><img src="/aws-training-report-PhamHoangPhuong/create-tg4.png" ></p>
+<li>Navigate to EC2 → Load Balancers → click Create Load Balancer → Select <strong>Application Load Balancer</strong> -> click Create.</li>
+<p><img src="/aws-training-report-PhamHoangPhuong/alb1.png" ></p>
+<li>Configure basic load balancer settings:
+<br>• Name: <code>saashr-alb</code>
+<br>• Scheme: Internet-facing
+<br>• IP address type: IPv4
+<p><img src="/aws-training-report-PhamHoangPhuong/alb2.png" ></p>
+</li>
+<li>Network mapping:
+<br>• VPC: Select <code>saashr-vpc</code>
+<br>• Subnets mapping: Explicitly check <code>public-1a</code> + <code>public-1b</code>
+<br>• Security Groups: Assign <code>sg-alb</code>
+<p><img src="/aws-training-report-PhamHoangPhuong/alb3.png" ></p>
+</li>
+<li>Listeners and Routing:
+<br>• Protocol: HTTP
+<br>• Port: 80
+<br>• Default Routing Action: Forward to target group → <code>tg-auth</code> -> click Create load balancer.
+<p><img src="/aws-training-report-PhamHoangPhuong/alb4.png" ></p>
+<li>The Application Load Balancer is successfully created.</li>
+<li><strong>Configure Path-Based Routing Rules:</strong> Modify the HTTP:80 Listener rules to implement the following conditional paths:
+<br>• Requests to <code>/api/v1/auth/*</code> → Forward to <code>tg-auth</code>
+<br>• Requests to <code>/api/v1/tenants/*</code> → Forward to <code>tg-tenant</code>
+<br>• Requests to <code>/api/v1/hr/*</code> → Forward to <code>tg-hr</code>
+<p><img src="/aws-training-report-PhamHoangPhuong/alb5.png" ></p>
+</li>
+<li>Click into the HTTP:80 Listener configuration to manage routing rules:</li>
+<p><img src="/aws-training-report-PhamHoangPhuong/alb6.png" ></p>
+<li>Click Add Rule:</li>
+<li>Add Condition -> Path: <code>/api/v1/auth/*</code></li>
+<p><img src="/aws-training-report-PhamHoangPhuong/alb7.png" ></p>
+<li>Select Action -> Forward to target group: <code>tg-auth</code></li>
+<p><img src="/aws-training-report-PhamHoangPhuong/alb8.png" ></p>
+<li>Repeat this sequence to establish routing paths for the remaining microservices. Final routing rules structure appears as follows:</li>
+<p><img src="/aws-training-report-PhamHoangPhuong/alb9.png" ></p>
+</ul>
+
+<h4>Step 10 — Amazon ECS Fargate + Auto Scaling Configuration</h4>
+<p>Navigate to Amazon ECS → click Create cluster → Name: <code>saashr-cluster</code>, Infrastructure: AWS Fargate (Serverless compute).</p>
+<ul>
+<p><img src="/aws-training-report-PhamHoangPhuong/create-cluster.png" ></p>
+<li><strong>Task Definitions Provisioning:</strong> Create an individual Task Definition for each microservice using Fargate launch type, allocated with 0.25 vCPU and 0.5 GB Memory.
+<br>• Container Image: Paste the corresponding image URI from your ECR repository.
+<br>• Port Mappings: Match the precise operational port of the backend application.
+<br>• Task Role (Least Privilege Application Permissions): Grants permissions such as <code>sqs:SendMessage</code>/<code>ReceiveMessage</code>/<code>DeleteMessage</code> for the tenant and HR workers, <code>cognito-idp:*</code> minimum permissions for the auth component, and <code>ssm:GetParameters</code>.
+<br>• Task Execution Role: Permits the ECS agent to pull container images from ECR, stream runtime outputs to CloudWatch Logs, and securely decrypt credentials from the SSM Parameter Store.
+<br>• Configuration Injection: Secrets are referenced dynamically from the SSM Parameter Store; the log driver is set to <code>awslogs</code> routing output to log groups named <code>/ecs/saashr/{service}</code>.
+</li>
+
+<li><strong>1. Create Task Definition for Auth Service:</strong>
+<br>• Family Name: <code>saashr-auth</code>
+<br>• CPU: .25 vCPU
+<br>• Memory: .5 GB
+<p><img src="/aws-training-report-PhamHoangPhuong/td-auth1.png" ></p>
+• Task Role: None (Auth does not interact directly with AWS resources outside of Cognito)
+<br>• Task Execution Role: <code>ecsTaskExecutionRole</code>
+<br>• Container Name: <code>saashr-auth</code>
+<br>• Image URI: Copy the URI string from the <code>saashr-auth</code> ECR repository.
+<br>• Container Port: 8000
+<p><img src="/aws-training-report-PhamHoangPhuong/td-auth2.png" ></p>
+</li>
+<li>Environment Variables Configuration -> Click Add environment variable and bind container keys to their respective Value From targets pointing to SSM Parameter Store keys as shown below:</li>
+<p><img src="/aws-training-report-PhamHoangPhuong/td-auth3.png" ></p>
+
+<li><strong>2. Create Task Definition for Tenant Service:</strong>
+<br>• Family Name: <code>saashr-tenant</code>
+<br>• CPU: .25 vCPU
+<br>• Memory: .5 GB
+<p><img src="/aws-training-report-PhamHoangPhuong/td-tenant1.png" ></p>
+• Task Role: Click to create a new IAM role:
+<br>&nbsp;&nbsp;&nbsp;&nbsp;- Role Name: <code>saashr-tenant-task-role</code>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;- Attached Custom Policy: Replace template <code>s3:GetObject</code> actions with <code>sqs:SendMessage</code> and replace resource path strings with your primary SQS ARN: <code>arn:aws:sqs:ap-southeast-1:016461465939:saashr-events</code>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;- Click Create role.
+<p><img src="/aws-training-report-PhamHoangPhuong/td-tenant2.png" ></p>
+• Task Role Binding: Assign <code>saashr-tenant-task-role</code>
+<br>• Task Execution Role: <code>ecsTaskExecutionRole</code>
+<br>• Container Name: <code>saashr-tenant</code>
+<br>• Image URI: Copy the URI string from the <code>saashr-tenant</code> ECR repository.
+<br>• Container Port: 8001
+<p><img src="/aws-training-report-PhamHoangPhuong/td-tenant3.png" ></p>
+</li>
+<li>Environment Variables Configuration -> Map internal keys to the corresponding SSM Parameter Store locations as shown:</li>
+<p><img src="/aws-training-report-PhamHoangPhuong/td-tenant4.png" ></p>
+
+<li><strong>3. Create Task Definition for HR Service:</strong>
+<br>• Family Name: <code>saashr-hr</code>
+<br>• CPU: .25 vCPU
+<br>• Memory: .5 GB
+<p><img src="/aws-training-report-PhamHoangPhuong/td-hr1.png" ></p>
+• Task Role: Click to create a new IAM role:
+<br>&nbsp;&nbsp;&nbsp;&nbsp;- Role Name: <code>saashr-hr-task-role</code>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;- Attached Custom Policy: Replace S3 permissions with <code>sqs:ReceiveMessage</code>, <code>sqs:DeleteMessage</code>, and <code>sqs:GetQueueAttributes</code>, targeting the SQS queue ARN: <code>arn:aws:sqs:ap-southeast-1:016461465939:saashr-events</code>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;- Click Create role.
+<p><img src="/aws-training-report-PhamHoangPhuong/td-hr2.png" ></p>
+• Task Role Binding: Assign <code>saashr-hr-task-role</code>
+<br>• Task Execution Role: <code>ecsTaskExecutionRole</code>
+<br>• Container Name: <code>saashr-hr</code>
+<br>• Image URI: Copy the URI string from the <code>saashr-hr</code> ECR repository.
+<br>• Container Port: 8002
+<p><img src="/aws-training-report-PhamHoangPhuong/td-hr3.png" ></p>
+</li>
+<li>Environment Variables Configuration -> Bind runtime keys to SSM Parameter Store configurations as shown:</li>
+<p><img src="/aws-training-report-PhamHoangPhuong/td-hr4.png" ></p>
+
+<li><strong>Service Auto Scaling Configuration (Applied to each running service):</strong> Implement a Target Tracking scaling policy tied to the metric <code>ECSServiceAverageCPUUtilization</code> set to a target value of <strong>70%</strong>. Capacity parameters are defined with a Minimum task count of <code>2</code> and a Maximum task count of <code>4</code>, enabling both automatic scale-out and scale-in actions.</li>
+<p><img src="/aws-training-report-PhamHoangPhuong/create-svc1.png" ></p>
+<p><img src="/aws-training-report-PhamHoangPhuong/create-svc2.png" ></p>
+<p><img src="/aws-training-report-PhamHoangPhuong/create-svc3.png" ></p>
+<p><img src="/aws-training-report-PhamHoangPhuong/create-svc4.png" ></p>
+<p><img src="/aws-training-report-PhamHoangPhuong/create-svc5.png" ></p>
+<li>Proceed with provisioning the remaining <code>tenant</code> and <code>hr</code> Fargate services within the cluster:</li>
+<p><img src="/aws-training-report-PhamHoangPhuong/create-svc6.png" ></p>
+<li>All 3 backend microservices are successfully running inside the ECS cluster:</li>
+<p><img src="/aws-training-report-PhamHoangPhuong/create-3svc-success.png" ></p>
+<li>Configuring auto-scaling (min 2 / max 4 at 70% CPU target utilization) serves as architectural validation proving horizontal elasticity and high availability across active synchronous application layers. Ensure scaling policies are validated and tracked for all three microservices.</li>
+</ul>
+
+
+
+<footer class=" footline" >
+	
+</footer>
+
+        
+        </div> 
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+        
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+        
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="/aws-training-report-PhamHoangPhuong/5-workshop/5.1-workshop-overview/" title="Introduction"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/aws-training-report-PhamHoangPhuong/5-workshop/5.3-Networking/" title="Truy cập S3 từ VPC" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+    
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/aws-training-report-PhamHoangPhuong/js/clipboard.min.js?1779445607"></script>
+    <script src="/aws-training-report-PhamHoangPhuong/js/perfect-scrollbar.min.js?1779445607"></script>
+    <script src="/aws-training-report-PhamHoangPhuong/js/perfect-scrollbar.jquery.min.js?1779445607"></script>
+    <script src="/aws-training-report-PhamHoangPhuong/js/jquery.sticky.js?1779445607"></script>
+    <script src="/aws-training-report-PhamHoangPhuong/js/featherlight.min.js?1779445607"></script>
+    <script src="/aws-training-report-PhamHoangPhuong/js/highlight.pack.js?1779445607"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/aws-training-report-PhamHoangPhuong/js/modernizr.custom-3.6.0.js?1779445607"></script>
+    <script src="/aws-training-report-PhamHoangPhuong/js/learn.js?1779445607"></script>
+    <script src="/aws-training-report-PhamHoangPhuong/js/hugo-learn.js?1779445607"></script>
+
+    <link href="/aws-training-report-PhamHoangPhuong/mermaid/mermaid.css?1779445607" rel="stylesheet" />
+    <script src="/aws-training-report-PhamHoangPhuong/mermaid/mermaid.js?1779445607"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <script>
+  (function (i, s, o, g, r, a, m) {
+    i["GoogleAnalyticsObject"] = r;
+    ((i[r] =
+      i[r] ||
+      function () {
+        (i[r].q = i[r].q || []).push(arguments);
+      }),
+      (i[r].l = 1 * new Date()));
+    ((a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]));
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m);
+  })(
+    window,
+    document,
+    "script",
+    "https://www.google-analytics.com/analytics.js",
+    "ga",
+  );
+
+  ga("create", "UA-158079754-2", "auto");
+  ga("send", "pageview");
+</script>
+
+  </body>
+</html>
